@@ -1,0 +1,555 @@
+/* ==========================================================================
+   CSS Variables & General Setup
+   ========================================================================== */
+:root {
+    --primary-color: #0b3d2c;
+    /* Deep emerald green */
+    --secondary-color: #1a5740;
+    /* Lighter emerald */
+    --gold: #d4af37;
+    /* Elegant gold */
+    --gold-light: #f5e08c;
+    /* Light gold for hover */
+    --bg-color: #fcfbf7;
+    /* Off-white warm background */
+    --bg-secondary: #f0ede1;
+    /* Slightly darker warm tone */
+    --text-main: #2c2c2c;
+    /* Dark grey for reading */
+    --text-muted: #666666;
+    --font-heading: 'Amiri', serif;
+    /* Elegant Islamic Serif */
+    --font-body: 'Outfit', sans-serif;
+    --radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.presented-by {
+    font-family: var(--font-heading);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.secondary-bg {
+    background-color: var(--bg-secondary);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--gold);
+    margin-top: 10px;
+}
+
+.text-center .section-title::after {
+    margin: 10px auto 0;
+}
+
+.lead-text {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-primary,
+.btn-outline {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: var(--gold);
+    color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.btn-primary:hover {
+    background-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    /* Beautiful Islamic Mosque/Lantern background */
+    background: url('https://images.unsplash.com/photo-1596404395874-517fc5e1ab8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    color: white;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    /* Darker overlay to make the gold/white text pop over the intricate background */
+    background: linear-gradient(rgba(11, 61, 44, 0.75), rgba(11, 61, 44, 0.95));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.presented-by {
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.headline {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.subheadline {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.countdown-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+    padding: 15px 20px;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.countdown-item::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: calc(var(--radius) - 4px);
+    pointer-events: none;
+}
+
+.countdown-item span {
+    font-size: 2.5rem;
+    font-family: var(--font-heading);
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.countdown-item small {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   Glassmorphism Card Style
+   ========================================================================== */
+.glass-card {
+    background: #ffffff;
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ==========================================================================
+   Event Details
+   ========================================================================== */
+.event-details .glass-card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    color: var(--gold);
+    background: var(--primary-color);
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.info-row h3 {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: #eee;
+}
+
+/* ==========================================================================
+   Agenda Timeline
+   ========================================================================== */
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-color: var(--gold);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px 40px;
+    box-sizing: border-box;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+    text-align: left;
+}
+
+.timeline-dot {
+    position: absolute;
+    top: 25px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--primary-color);
+    border: 4px solid var(--gold);
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.timeline-item:nth-child(odd) .timeline-dot {
+    right: -10px;
+}
+
+.timeline-item:nth-child(even) .timeline-dot {
+    left: -10px;
+}
+
+.timeline-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.timeline-content h3 {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.timeline-content h4 {
+    color: var(--primary-color);
+}
+
+/* ==========================================================================
+   RSVP & Guestbook Forms
+   ========================================================================== */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.feedback-msg {
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Gallery Section
+   ========================================================================== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 250px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+/* ==========================================================================
+   Protocol / Guestbook Dual Col
+   ========================================================================== */
+.dual-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.messages-list {
+    margin-top: 30px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.msg-bubble {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--gold);
+}
+
+.msg-bubble strong {
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.info-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.info-item .icon-gold {
+    font-size: 2rem;
+    color: var(--gold);
+    margin-top: 5px;
+}
+
+.mt-3 {
+    margin-top: 30px;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 40px 0;
+}
+
+footer h3 {
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+footer .copyright {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   Responsive Mobile
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .headline {
+        font-size: 2.5rem;
+    }
+
+    .countdown-item {
+        min-width: 60px;
+        padding: 10px;
+        flex: 1;
+    }
+
+    .countdown-item span {
+        font-size: 1.8rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 60px;
+        padding-right: 0;
+    }
+
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        left: 0;
+        text-align: left;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-dot,
+    .timeline-item:nth-child(even) .timeline-dot {
+        left: 10px;
+        right: auto;
+    }
+
+    .dual-col {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
