@@ -38,6 +38,12 @@ body {
     overflow-x: hidden;
 }
 
+/* Scroll Lock State before clicking Buka Undangan */
+body.locked {
+    overflow: hidden;
+    height: 100vh;
+}
+
 h1,
 h2,
 h3,

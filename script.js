@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwi-fjlZSpIy7sShvsCHGe9VAxJe4jshC06gYOcA34HtYYrb8TN7VEBI9xJvUr4FZnDEA/exec";
+    // Paksa agar selalu mulai dari atas saat di-refresh (mengatasi nyangkut jika di-refresh di tengah jalan)
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // 0. Lock Scroll Awal
+    document.body.classList.add('locked');
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw-9wW3TZx-v6oJog0D3FB8Wuc6S3Uar9ZEHht2Z3cOG1YdSqepFSpAkLxEduLiNdnLOw/exec";
     // 1. Initialize AOS (Animate on Scroll)
     AOS.init({
         once: true,
@@ -161,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p>${pesan}</p>
                     `;
                     // Masukkan ke paling atas tanpa perlu request ulang semua list
-                    const firstChild = messagesList.firstChild;
-                    if (firstChild && firstChild.innerText.includes('Keluarga Bpk. Budi (Contoh)')) {
+                    const firstMsg = messagesList.querySelector('.msg-bubble');
+                    if (firstMsg && firstMsg.textContent.includes('Keluarga Bpk. Budi (Contoh)')) {
                         messagesList.innerHTML = '';
                     }
                     messagesList.insertBefore(newMsg, messagesList.firstChild);
@@ -195,24 +204,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Remove trigger events once played successfully
                     document.body.removeEventListener('click', playAudio);
-                    document.body.removeEventListener('scroll', playAudio);
                     document.body.removeEventListener('touchstart', playAudio);
+                    window.removeEventListener('scroll', playAudio);
+                    window.removeEventListener('wheel', playAudio);
                 }).catch(err => {
                     console.log("Autoplay blocked by browser policy. Menunggu interaksi...");
                 });
             }
         };
 
-        // Trigger saat menekan tombol "Buka Undangan" atau area lain
+        const executeUndangan = (e) => {
+            if (e) e.preventDefault();
+            // Unlock scroll
+            document.body.classList.remove('locked');
+            
+            // Putar lagu
+            playAudio();
+
+            // Sembunyikan tombol 'Buka Undangan' agar lebih clean setelah dibuka
+            const btnBuka = document.getElementById('btn-buka');
+            if (btnBuka) {
+                btnBuka.style.display = 'none';
+            }
+
+            // Scroll manual ke event details secara halus (karena td preventDefault)
+            const eventDetails = document.getElementById('event-details');
+            if (eventDetails) {
+                eventDetails.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        // Trigger HANYA saat menekan tombol "Buka Undangan"
         const btnBuka = document.getElementById('btn-buka');
         if (btnBuka) {
-            btnBuka.addEventListener('click', playAudio);
+            btnBuka.addEventListener('click', executeUndangan);
         }
-
-        // Attempt playback on first general interaction
-        document.body.addEventListener('click', playAudio);
-        document.body.addEventListener('touchstart', playAudio);
-        document.body.addEventListener('scroll', playAudio, { once: true });
 
         // Toggle playback on button click
         btnAudio.addEventListener('click', (e) => {
