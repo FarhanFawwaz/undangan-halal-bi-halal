@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxzlJnFn1zcMX8WyL2392GXNHSbM2wokFXT8JcXtUpYNkNpkVWJQVm9aYC-5ruwMgnXyQ/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw-9wW3TZx-v6oJog0D3FB8Wuc6S3Uar9ZEHht2Z3cOG1YdSqepFSpAkLxEduLiNdnLOw/exec";
     // 1. Initialize AOS (Animate on Scroll)
     AOS.init({
         once: true,
@@ -81,41 +81,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Guestbook Form Handling Simulation with LocalStorage
+    // 4. Guestbook Form Handling with Google Sheets
     const guestbookForm = document.getElementById('guestbookForm');
     const messagesList = document.getElementById('messagesList');
 
-    // Kunci untuk menyimpan data di LocalStorage
-    const STORAGE_KEY = 'halalBiHalalGuestbook';
-
-    // Fungsi untuk memuat pesan dari LocalStorage
+    // Fungsi untuk memuat pesan dari Google Sheets via GET request
     const loadMessages = () => {
-        const storedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        
-        // Hapus dummy default html content jika ada
-        if (messagesList) {
-            messagesList.innerHTML = ''; 
-        }
+        if (!messagesList) return;
 
-        // Tampilkan pesan bawaan jika kosong, atau render histori
-        if (storedMessages.length === 0) {
-            messagesList.innerHTML = `
-                <div class="msg-bubble">
-                    <strong>Keluarga Bpk. Budi</strong>
-                    <p>Selamat bersilaturahmi. Mohon maaf lahir dan batin.</p>
-                </div>
-            `;
-        } else {
-            storedMessages.forEach(msg => {
-                const newMsg = document.createElement('div');
-                newMsg.classList.add('msg-bubble');
-                newMsg.innerHTML = `
-                    <strong>${msg.nama}</strong>
-                    <p>${msg.pesan}</p>
+        // Tampilkan status loading
+        messagesList.innerHTML = '<div class="msg-bubble"><p><em>Memuat pesan buku tamu...</em></p></div>';
+
+        fetch(scriptURL)
+            .then(res => res.json())
+            .then(data => {
+                messagesList.innerHTML = ''; // bersihkan loading
+
+                if (data.result === 'success' && data.data.length > 0) {
+                    data.data.forEach(msg => {
+                        const newMsg = document.createElement('div');
+                        newMsg.classList.add('msg-bubble');
+                        newMsg.innerHTML = `
+                            <strong>${msg.nama}</strong>
+                            <p>${msg.pesan}</p>
+                        `;
+                        messagesList.appendChild(newMsg);
+                    });
+                } else {
+                    // Jika kosong atau error
+                    messagesList.innerHTML = `
+                        <div class="msg-bubble">
+                            <strong>Keluarga Bpk. Budi (Contoh)</strong>
+                            <p>Selamat bersilaturahmi. Mohon maaf lahir dan batin.</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(err => {
+                console.error("Gagal memuat buku tamu:", err);
+                messagesList.innerHTML = `
+                    <div class="msg-bubble">
+                        <strong style="color: red;">Koneksi terputus</strong>
+                        <p>Histori perpesanan gagal dimuat sementara waktu.</p>
+                    </div>
                 `;
-                messagesList.appendChild(newMsg);
             });
-        }
     };
 
     // Panggil muat data awal
@@ -134,23 +144,39 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerText = "Mengirim...";
             btn.disabled = true;
 
-            setTimeout(() => {
-                // Ambil data lama
-                const storedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                
-                // Tambahkan pesan baru ke urutan pertama (paling atas)
-                storedMessages.unshift({ nama, pesan });
-                
-                // Simpan kembali ke LocalStorage
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(storedMessages));
+            const urlEncodedData = new URLSearchParams();
+            urlEncodedData.append('nama', nama);
+            urlEncodedData.append('pesan', pesan);
 
-                // Render ulang seluruh pesan
-                loadMessages();
+            // POST ke Google Apps script yang sama
+            fetch(scriptURL, { method: 'POST', body: urlEncodedData, mode: 'no-cors' })
+                .then(response => {
+                    // Update tampilan web seketika tanpa nunggu load ulang biar terasa realtime
+                    const newMsg = document.createElement('div');
+                    newMsg.classList.add('msg-bubble');
+                    // Style border sedikit berbeda untuk pesan asli user yg baru dikirim (opsional)
+                    newMsg.style.borderLeftColor = "var(--primary-color)";
+                    newMsg.innerHTML = `
+                        <strong>${nama}</strong>
+                        <p>${pesan}</p>
+                    `;
+                    // Masukkan ke paling atas tanpa perlu request ulang semua list
+                    const firstChild = messagesList.firstChild;
+                    if (firstChild && firstChild.innerText.includes('Keluarga Bpk. Budi (Contoh)')) {
+                        messagesList.innerHTML = '';
+                    }
+                    messagesList.insertBefore(newMsg, messagesList.firstChild);
 
-                guestbookForm.reset();
-                btn.innerText = "Kirim Ucapan";
-                btn.disabled = false;
-            }, 800);
+                    guestbookForm.reset();
+                    btn.innerText = "Kirim Ucapan";
+                    btn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error saat kirim buku tamu!', error.message);
+                    btn.innerText = "Gagal. Coba lagi?";
+                    btn.disabled = false;
+                    setTimeout(() => btn.innerText = "Kirim Ucapan", 3000);
+                });
         });
     }
 
@@ -166,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bgMusic.play().then(() => {
                     isPlaying = true;
                     btnAudio.classList.remove('paused');
-                    
+
                     // Remove trigger events once played successfully
                     document.body.removeEventListener('click', playAudio);
                     document.body.removeEventListener('scroll', playAudio);
