@@ -114,4 +114,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 800);
         });
     }
+
+    // 5. Audio Autoplay Logic
+    const bgMusic = document.getElementById('bg-music');
+    const btnAudio = document.getElementById('btn-audio');
+    let isPlaying = false;
+
+    if (bgMusic && btnAudio) {
+        // Handle autoplay limits (browser block)
+        const playAudio = () => {
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                btnAudio.classList.remove('paused');
+                document.body.removeEventListener('click', playAudio);
+                document.body.removeEventListener('scroll', playAudio);
+            }).catch(err => {
+                console.log("Autoplay blocked by browser policy.");
+            });
+        };
+
+        // Attempt playback on first interaction
+        document.body.addEventListener('click', playAudio);
+        document.body.addEventListener('scroll', playAudio, { once: true });
+
+        // Toggle playback on button click
+        btnAudio.addEventListener('click', (e) => {
+            e.stopPropagation(); // prevent triggering body click above
+            if (isPlaying) {
+                bgMusic.pause();
+                btnAudio.classList.add('paused');
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                btnAudio.classList.remove('paused');
+                isPlaying = true;
+            }
+        });
+    }
 });
