@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const scriptURL = "https://script.google.com/macros/s/AKfycbw-9wW3TZx-v6oJog0D3FB8Wuc6S3Uar9ZEHht2Z3cOG1YdSqepFSpAkLxEduLiNdnLOw/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwi-fjlZSpIy7sShvsCHGe9VAxJe4jshC06gYOcA34HtYYrb8TN7VEBI9xJvUr4FZnDEA/exec";
     // 1. Initialize AOS (Animate on Scroll)
     AOS.init({
         once: true,
