@@ -81,9 +81,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Guestbook Form Handling Simulation
+    // 4. Guestbook Form Handling Simulation with LocalStorage
     const guestbookForm = document.getElementById('guestbookForm');
     const messagesList = document.getElementById('messagesList');
+
+    // Kunci untuk menyimpan data di LocalStorage
+    const STORAGE_KEY = 'halalBiHalalGuestbook';
+
+    // Fungsi untuk memuat pesan dari LocalStorage
+    const loadMessages = () => {
+        const storedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        
+        // Hapus dummy default html content jika ada
+        if (messagesList) {
+            messagesList.innerHTML = ''; 
+        }
+
+        // Tampilkan pesan bawaan jika kosong, atau render histori
+        if (storedMessages.length === 0) {
+            messagesList.innerHTML = `
+                <div class="msg-bubble">
+                    <strong>Keluarga Bpk. Budi</strong>
+                    <p>Selamat bersilaturahmi. Mohon maaf lahir dan batin.</p>
+                </div>
+            `;
+        } else {
+            storedMessages.forEach(msg => {
+                const newMsg = document.createElement('div');
+                newMsg.classList.add('msg-bubble');
+                newMsg.innerHTML = `
+                    <strong>${msg.nama}</strong>
+                    <p>${msg.pesan}</p>
+                `;
+                messagesList.appendChild(newMsg);
+            });
+        }
+    };
+
+    // Panggil muat data awal
+    if (messagesList) {
+        loadMessages();
+    }
 
     if (guestbookForm) {
         guestbookForm.addEventListener('submit', (e) => {
@@ -97,16 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = true;
 
             setTimeout(() => {
-                // Create new message bubble
-                const newMsg = document.createElement('div');
-                newMsg.classList.add('msg-bubble');
-                newMsg.innerHTML = `
-                    <strong>${nama}</strong>
-                    <p>${pesan}</p>
-                `;
+                // Ambil data lama
+                const storedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                
+                // Tambahkan pesan baru ke urutan pertama (paling atas)
+                storedMessages.unshift({ nama, pesan });
+                
+                // Simpan kembali ke LocalStorage
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(storedMessages));
 
-                // Prepend to list
-                messagesList.insertBefore(newMsg, messagesList.firstChild);
+                // Render ulang seluruh pesan
+                loadMessages();
 
                 guestbookForm.reset();
                 btn.innerText = "Kirim Ucapan";

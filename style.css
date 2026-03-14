@@ -262,7 +262,7 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .info-icon {
@@ -430,13 +430,33 @@ a {
 }
 
 /* 7 Grid Items Layout (Bento Style) */
-.gallery-item:nth-child(1) { grid-column: span 8; }
-.gallery-item:nth-child(2) { grid-column: span 4; }
-.gallery-item:nth-child(3) { grid-column: span 4; }
-.gallery-item:nth-child(4) { grid-column: span 4; }
-.gallery-item:nth-child(5) { grid-column: span 4; }
-.gallery-item:nth-child(6) { grid-column: span 4; }
-.gallery-item:nth-child(7) { grid-column: span 8; }
+.gallery-item:nth-child(1) {
+    grid-column: span 8;
+}
+
+.gallery-item:nth-child(2) {
+    grid-column: span 4;
+}
+
+.gallery-item:nth-child(3) {
+    grid-column: span 4;
+}
+
+.gallery-item:nth-child(4) {
+    grid-column: span 4;
+}
+
+.gallery-item:nth-child(5) {
+    grid-column: span 4;
+}
+
+.gallery-item:nth-child(6) {
+    grid-column: span 4;
+}
+
+.gallery-item:nth-child(7) {
+    grid-column: span 8;
+}
 
 .gallery-item img {
     width: 100%;
@@ -523,10 +543,22 @@ footer .copyright {
         grid-template-columns: repeat(2, 1fr);
         grid-auto-rows: 200px;
     }
-    .gallery-item:nth-child(n) { grid-column: span 1; }
-    .gallery-item:nth-child(1) { grid-column: span 2; }
-    .gallery-item:nth-child(4) { grid-column: span 2; }
-    .gallery-item:nth-child(7) { grid-column: span 2; }
+
+    .gallery-item:nth-child(n) {
+        grid-column: span 1;
+    }
+
+    .gallery-item:nth-child(1) {
+        grid-column: span 2;
+    }
+
+    .gallery-item:nth-child(4) {
+        grid-column: span 2;
+    }
+
+    .gallery-item:nth-child(7) {
+        grid-column: span 2;
+    }
 
     .headline {
         font-size: 2.5rem;
@@ -578,6 +610,7 @@ footer .copyright {
     .gallery-grid {
         grid-template-columns: 1fr;
     }
+
     .gallery-item:nth-child(n) {
         grid-column: span 1;
     }
@@ -627,6 +660,7 @@ footer .copyright {
         bottom: 20px;
         right: 20px;
     }
+
     .btn-audio {
         width: 45px;
         height: 45px;
