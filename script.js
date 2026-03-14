@@ -123,23 +123,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bgMusic && btnAudio) {
         // Handle autoplay limits (browser block)
         const playAudio = () => {
-            bgMusic.play().then(() => {
-                isPlaying = true;
-                btnAudio.classList.remove('paused');
-                document.body.removeEventListener('click', playAudio);
-                document.body.removeEventListener('scroll', playAudio);
-            }).catch(err => {
-                console.log("Autoplay blocked by browser policy.");
-            });
+            if (!isPlaying) {
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    btnAudio.classList.remove('paused');
+                    
+                    // Remove trigger events once played successfully
+                    document.body.removeEventListener('click', playAudio);
+                    document.body.removeEventListener('scroll', playAudio);
+                    document.body.removeEventListener('touchstart', playAudio);
+                }).catch(err => {
+                    console.log("Autoplay blocked by browser policy. Menunggu interaksi...");
+                });
+            }
         };
 
-        // Attempt playback on first interaction
+        // Trigger saat menekan tombol "Buka Undangan" atau area lain
+        const btnBuka = document.getElementById('btn-buka');
+        if (btnBuka) {
+            btnBuka.addEventListener('click', playAudio);
+        }
+
+        // Attempt playback on first general interaction
         document.body.addEventListener('click', playAudio);
+        document.body.addEventListener('touchstart', playAudio);
         document.body.addEventListener('scroll', playAudio, { once: true });
 
         // Toggle playback on button click
         btnAudio.addEventListener('click', (e) => {
-            e.stopPropagation(); // prevent triggering body click above
+            e.stopPropagation(); // prevent triggering body click twice
             if (isPlaying) {
                 bgMusic.pause();
                 btnAudio.classList.add('paused');
