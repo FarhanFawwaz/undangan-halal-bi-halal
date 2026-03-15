@@ -39,9 +39,19 @@ body {
 }
 
 /* Scroll Lock State before clicking Buka Undangan */
-body.locked {
-    overflow: hidden;
-    height: 100vh;
+html.locked, body.locked {
+    overflow: hidden !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    position: fixed !important;
+    width: 100vw !important;
+    touch-action: none;
+}
+
+/* Master class to hide content completely */
+.hidden-content {
+    display: none !important;
+    opacity: 0;
 }
 
 h1,
@@ -148,8 +158,11 @@ a {
    ========================================================================== */
 .hero-section {
     position: relative;
-    height: 100vh;
-    min-height: 600px;
+    height: 100vh; /* Fallback */
+    height: 100dvh; /* DynamicViewport height untuk iOS/Android Toolbar */
+    width: 100vw;
+    /* Remove min-height: 600px; so it fits perfectly on tiny screens */
+    overflow: hidden; /* Lock isi hero section dari bocor ke bawah */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -613,12 +626,48 @@ footer .copyright {
 }
 
 @media screen and (max-width: 480px) {
+    .headline {
+        font-size: 1.8rem;
+    }
+
+    .subheadline {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .countdown-container {
+        gap: 8px;
+    }
+
+    .countdown-item {
+        min-width: 50px;
+        padding: 8px 10px;
+    }
+
+    .countdown-item span {
+        font-size: 1.5rem;
+    }
+
+    .countdown-item small {
+        font-size: 0.70rem;
+    }
+
     .gallery-grid {
         grid-template-columns: 1fr;
     }
 
     .gallery-item:nth-child(n) {
         grid-column: span 1;
+    }
+}
+
+/* Very tiny phones */
+@media screen and (max-width: 360px) {
+    .headline {
+        font-size: 1.5rem;
+    }
+    .countdown-item span {
+        font-size: 1.2rem;
     }
 }
 

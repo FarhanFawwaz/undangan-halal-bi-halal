@@ -6,7 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo(0, 0);
 
     // 0. Lock Scroll Awal
+    document.documentElement.classList.add('locked');
     document.body.classList.add('locked');
+
+    // Mencegah scroll di drag secara paksa di HP (touchmove blocker)
+    const preventScroll = (e) => {
+        e.preventDefault();
+    };
+    document.addEventListener('touchmove', preventScroll, { passive: false });
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbw-9wW3TZx-v6oJog0D3FB8Wuc6S3Uar9ZEHht2Z3cOG1YdSqepFSpAkLxEduLiNdnLOw/exec";
     // 1. Initialize AOS (Animate on Scroll)
@@ -216,7 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const executeUndangan = (e) => {
             if (e) e.preventDefault();
             // Unlock scroll
+            document.documentElement.classList.remove('locked');
             document.body.classList.remove('locked');
+            document.removeEventListener('touchmove', preventScroll);
             
             // Putar lagu
             playAudio();
@@ -227,10 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnBuka.style.display = 'none';
             }
 
+            // Tampilkan konten utama dengan menghapus class hidden
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.classList.remove('hidden-content');
+                // Trigger reflow untuk body agar animasi bisa smooth jika ada text-fading
+                void mainContent.offsetWidth;
+                mainContent.style.transition = 'opacity 1.5s ease-in-out';
+                mainContent.style.opacity = '1';
+                
+                // Refresh AOS animations untuk elemen yg baru dimunculkan
+                if (typeof AOS !== 'undefined') {
+                    AOS.refresh();
+                }
+            }
+
             // Scroll manual ke event details secara halus (karena td preventDefault)
             const eventDetails = document.getElementById('event-details');
             if (eventDetails) {
-                eventDetails.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    eventDetails.scrollIntoView({ behavior: 'smooth' });
+                }, 100); // Jeda sejenak agar browser merender main-content dulu
             }
         };
 
